@@ -4,10 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "make-seed": "npx knex seed:make dev --knexfile ./startup/db/knexfile.js",
-    "migrate": "npx knex migrate:latest --knexfile ./startup/db/knexfile.js ",
-    "seed": "npx knex seed:run --knexfile ./startup/db/knexfile.js ",
-    "down": "npx knex migrate:down --knexfile ./startup/db/knexfile.js",
     "dev": "nodemon index.js",
     "test": "jest --verbose --runInBand  --coverage --detectOpenHandles --watchAll",
     "start": "node index.js"
@@ -16,14 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1077.0",
-    "bunyan": "^1.8.15",
     "express": "^4.17.3",
+    "config": "^2.0.1",
+    "mongoose": "^5.2.12",
     "express-async-errors": "^3.1.1",
     "joi": "^17.6.0",
-    "knex": "^0.95.14",
-    "mysql2": "^2.3.3",
-    "objection": "^3.0.0",
     "winston": "^3.6.0"
   },
   "devDependencies": {

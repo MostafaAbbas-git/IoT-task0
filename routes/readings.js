@@ -2,41 +2,52 @@ const express = require('express');
 const router = express.Router();
 const winston = require('winston');
 
-const { Sensor1, validateSensor1 } = require('../models/sensor1');
+const { Sensor1, validateSensor1 } = require("../models/sensor1");
+
+
+async function getSensorReadings() {
+    // Retrieve all readings coming from sensor1 from the database as an array of objects
+    return await Sensor1.find().sort("_id");
+}
+
+
+async function addValue(value) {
+    const valueModel = new Sensor1(value);
+    return await valueModel.save();
+}
 
 
 router.get("/", async (req, res) => {
-    // Retrieve all readings coming from sensor1 from the database as an object
-    const readings = await Sensor1.query().orderBy('id').select('readings');
 
-    // extract only the values from the object
+    const data = await getSensorReadings();
+
+    // extract the value of the readings from each object
     let values_array = [];
-    for (let i = 0; i < readings.length; i++) {
-        values_array[i] = readings[i].readings;
+    for (let i = 0; i < data.length; i++) {
+        values_array[i] = data[i].readings;
     }
 
     // construct a json with the total number of readings and the values then send it
     res.status(200).json({
-        totalValues: readings.length,
+        totalValues: data.length,
         Values: values_array,
     });
 
 });
 
 
-router.post("/temp", async (req, res) => {
+router.post("/", async (req, res) => {
     // insert into the database the temperature value
-    const value = await Sensor1.query().insert({
+    const newValue = await addValue({
         readings: req.body.temperature
     });
 
     // send the newly added value 
     res.status(200).json({
         message: "Value saved",
-        value: value.readings,
+        value: newValue.readings,
     });
 });
-
 
 
 module.exports = router;

@@ -1,19 +1,27 @@
-const { Model } = require('objection');
-const Joi = require('joi');
+const mongoose = require("mongoose");
 
-class Sensor2 extends Model {
-    static get tableName() {
-        return 'sensor1';
+const sensor2Schema = new mongoose.Schema({
+    readings: {
+        type: Number,
+        required: true
     }
+});
+
+function getSensor2Model() {
+    return mongoose.model("Sensor2", sensor2Schema);
 }
+
+const Sensor2 = getSensor2Model();
 
 function validateSensor2(req) {
     const schema = Joi.object({
-        id: Joi.number().integer(),
         readings: Joi.number().required()
     });
     return schema.validate(req);
 }
 
-exports.Sensor2 = Sensor2;
-exports.validateSensor2 = validateSensor2;
+module.exports = {
+    Sensor2: Sensor2,
+    validateSensor2: validateSensor2,
+    sensor2Schema: sensor2Schema
+};
