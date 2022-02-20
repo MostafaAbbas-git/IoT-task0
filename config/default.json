@@ -1,3 +1,4 @@
 {
-  "db": "mongodb://localhost/iot_task0"
+  "db": "mongodb://localhost/iot_task0",
+  "MONGODB_URI": "mongodb+srv://iotuser:i6BR3FhLxiagRhxO@iot-task0.slr9i.mongodb.net/iot-task0?retryWrites=true&w=majority"
 }

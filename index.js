@@ -3,16 +3,15 @@ const app = express();
 const winston = require('winston');
 const server = require('http').createServer(app);
 
-
 require('./startup/routes')(app);
 require("./startup/database")();
 require("./startup/logging");
+
 
 /* HomePage */
 app.get('/', (req, res) => {
     res.sendFile(__dirname + "/views/home.html");
 });
-
 
 // PORT
 const port = process.env.PORT || 8000;

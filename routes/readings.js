@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const winston = require('winston');
 
 const { Sensor1, validateSensor1 } = require("../models/sensor1");
 
@@ -28,13 +27,11 @@ router.get("/", async (req, res) => {
     }
 
     // construct a json with the total number of readings and the values then send it
-    // res.status(200).json({
-    //     totalValues: data.length,
-    //     Values: values_array,
-    // });
-    winston.info(`totalValues: ${data.length}\n 
-    values_array: ${values_array}`);
-    res.send(values_array);
+    res.status(200).json({
+        totalValues: data.length,
+        Values: values_array,
+    });
+
 });
 
 
@@ -51,5 +48,16 @@ router.post("/", async (req, res) => {
     });
 });
 
+
+router.delete("/", async (req, res) => {
+    // remove all the readings of sensor1 (clear the database)
+
+    const check = await Sensor1.remove();
+
+    res.status(200).json({
+        message: "Sensor1 readings successfully deleted",
+        details: check,
+    });
+});
 
 module.exports = router;
