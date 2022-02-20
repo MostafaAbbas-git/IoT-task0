@@ -3,6 +3,8 @@ const app = express();
 const winston = require('winston');
 const server = require('http').createServer(app);
 
+const { Sensor1, validateSensor1 } = require('./models/sensor1');
+
 
 require('./startup/db/db-setup')();
 require('./startup/routes')(app);
@@ -37,7 +39,7 @@ app.get("/read", async (req, res) => {
 });
 
 
-router.post("/update", async (req, res) => {
+app.post("/update", async (req, res) => {
     // insert into the database the temperature value
     const value = await Sensor1.query().insert({
         readings: req.body.temperature
