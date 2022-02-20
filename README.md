@@ -2,7 +2,7 @@
 
 instructions to update heroku:
 
-git add .
+git add .\t
 git commit -m "<YOUR COMMIT MESSAGE>"
 git push origin main
 heroku login
