@@ -1,2 +1,3 @@
 {"level":"info","message":"Listening on port 8000..."}
 {"level":"info","message":"Connected to mongodb://localhost/iot_task0..."}
+{"level":"info","message":"totalValues: 3\n \n    values_array: 202,2,14"}

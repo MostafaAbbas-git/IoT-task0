@@ -28,11 +28,13 @@ router.get("/", async (req, res) => {
     }
 
     // construct a json with the total number of readings and the values then send it
-    res.status(200).json({
-        totalValues: data.length,
-        Values: values_array,
-    });
-
+    // res.status(200).json({
+    //     totalValues: data.length,
+    //     Values: values_array,
+    // });
+    winston.info(`totalValues: ${data.length}\n 
+    values_array: ${values_array}`);
+    res.send(values_array);
 });
 
 
