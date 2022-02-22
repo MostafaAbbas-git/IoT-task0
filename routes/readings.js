@@ -1,62 +1,71 @@
 const express = require('express');
 const router = express.Router();
 
-const { Sensor1, validateSensor1 } = require("../models/sensor1");
+const { tempSensor, addTempValue, getTempReadings, getLastTemp } = require("../models/tempSensor");
+const { ldrSensor, validateReadings, getLDRReadings, addLDRValue, getLastDistance } = require("../models/ldrSensor");
 
-
-async function getSensorReadings() {
-    // Retrieve all readings coming from sensor1 from the database as an array of objects
-    return await Sensor1.find().sort("_id");
-}
-
-
-async function addValue(value) {
-    const valueModel = new Sensor1(value);
-    return await valueModel.save();
-}
+const validate = require('../middleware/validate');
 
 
 router.get("/", async (req, res) => {
 
-    const data = await getSensorReadings();
+    const temperature = await getTempReadings();
+    const distance = await getLDRReadings();
 
-    // extract the value of the readings from each object
-    let values_array = [];
-    for (let i = 0; i < data.length; i++) {
-        values_array[i] = data[i].readings;
-    }
+    // const timestamp = JSON.stringify(temperature[0].createdAt);
+    // const splittedTime = timestamp.split(":", 3);
+    // var seconds = parseInt(splittedTime[2]);
 
-    // construct a json with the total number of readings and the values then send it
+    // Send the response as json with all values stored in the db
     res.status(200).json({
-        totalValues: data.length,
-        Values: values_array,
+        temperature: temperature,
+        distance: distance,
     });
 
 });
 
+router.get("/one", async (req, res) => {
 
-router.post("/", async (req, res) => {
-    // insert into the database the temperature value
-    const newValue = await addValue({
-        readings: req.body.temperature
+    const lastTemp = await getLastTemp();
+    const lastDistance = await getLastDistance();
+
+
+    // send the response as json with the last read of each sensor
+    res.status(200).json({
+        temperature: lastTemp,
+        distance: lastDistance,
+    });
+});
+
+router.post("/", validate(validateReadings), async (req, res) => {
+
+    // insert into the database
+    const newTemp = await addTempValue({
+        temperature: req.body.temperature
+    });
+    const newDistance = await addLDRValue({
+        distance: req.body.distance
     });
 
     // send the newly added value 
     res.status(200).json({
-        message: "Value saved",
-        value: newValue.readings,
+        message: "Values saved",
+        temperature: newTemp.temperature,
+        distance: newDistance.distance
     });
 });
 
 
 router.delete("/", async (req, res) => {
-    // remove all the readings of sensor1 (clear the database)
+    // remove all the readings of both sensors (clear the database)
 
-    const check = await Sensor1.remove();
+    const tempResponse = await tempSensor.remove();
+    const ldrResponse = await ldrSensor.remove();
 
     res.status(200).json({
-        message: "Sensor1 readings successfully deleted",
-        details: check,
+        message: "Database cleared successfully",
+        tempResponse: tempResponse,
+        ldrResponse: ldrResponse
     });
 });
 
