@@ -15,7 +15,7 @@ const tempSensor = getTempSensorModel();
 
 
 async function getTempReadings() {
-    // Retrieve last temperature value added by the ESP
+    // Retrieve all temperature values added by the ESP
     return await tempSensor.find().sort({ _id: 1 });
 
 }

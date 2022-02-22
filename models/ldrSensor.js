@@ -17,13 +17,13 @@ const ldrSensor = getLdrSensorModel();
 
 
 async function getLDRReadings() {
-    // Retrieve last temperature value added by the ESP
+    // Retrieve all distance values added by the ESP
     return await ldrSensor.find().sort({ _id: 1 });
 }
 
 
 async function getLastDistance() {
-    // Retrieve last temperature value added by the ESP
+    // Retrieve last distance value added by the ESP
     return await ldrSensor.findOne().sort({ '_id': -1 }).limit(1);
 
 }

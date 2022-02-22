@@ -11,15 +11,20 @@ router.get("/", async (req, res) => {
 
     const temperature = await getTempReadings();
     const distance = await getLDRReadings();
-
+    var tempValues = [];
+    var distanceValues = [];
     // const timestamp = JSON.stringify(temperature[0].createdAt);
     // const splittedTime = timestamp.split(":", 3);
     // var seconds = parseInt(splittedTime[2]);
 
+
+    temperature.forEach(element => tempValues.push(element.temperature));
+    distance.forEach(element => distanceValues.push(element.distance));
+
     // Send the response as json with all values stored in the db
     res.status(200).json({
-        temperature: temperature,
-        distance: distance,
+        temperature: tempValues,
+        distance: distanceValues,
     });
 
 });
