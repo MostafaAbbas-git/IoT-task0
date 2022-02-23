@@ -1,2 +1,2 @@
 {"level":"info","message":"Listening on port 8000..."}
-{"level":"info","message":"Connected to db: mongodb://localhost/iot_task0..."}
+{"level":"info","message":"Connected to db: mongodb+srv://iotuser:i6BR3FhLxiagRhxO@iot-task0.slr9i.mongodb.net/iot-task0?retryWrites=true&w=majority..."}

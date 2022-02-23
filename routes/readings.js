@@ -26,20 +26,42 @@ router.get("/", cors(), async (req, res) => {
 
 });
 
-router.get("/one", async (req, res) => {
+router.get("/withtime", cors(), async (req, res) => {
 
-    const lastTemp = await getLastTemp();
-    const lastDistance = await getLastDistance();
+    const temperature = await getTempReadings();
+    const distance = await getLDRReadings();
 
+    var tempValues = [];
+    var distanceValues = [];
+    var timestamps = [];
 
-    // send the response as json with the last read of each sensor
-    res.status(200).json({
-        temperature: lastTemp,
-        distance: lastDistance,
+    distance.forEach(element => distanceValues.push(element.distance));
+    temperature.forEach(element => {
+        tempValues.push(element.temperature);
+
+        // add timestamps
+        var timestamp = JSON.stringify(element.createdAt);
+        var splittedStamp = timestamp.split("T", 2);
+        var totalTime = splittedStamp[1];
+        var splittedTime = totalTime.split(".", 2);
+        var time = splittedTime[0];
+        timestamps.push(time);
     });
+
+    const reversedTempValues = tempValues.reverse();
+    const reversedDistanceValues = distanceValues.reverse();
+    const reversedTimestampValues = timestamps.reverse();
+
+    // send the response as json with the last read of each sensor    
+    res.status(200).json({
+        temperature: reversedTempValues,
+        distance: reversedDistanceValues,
+        time: reversedTimestampValues
+    });
+
 });
 
-router.post("/", validate(validateReadings), async (req, res) => {
+router.post("/", [validate(validateReadings), cors()], async (req, res) => {
 
     // insert into the database
     const newTemp = await addTempValue({
@@ -58,7 +80,7 @@ router.post("/", validate(validateReadings), async (req, res) => {
 });
 
 
-router.delete("/", async (req, res) => {
+router.delete("/", cors(), async (req, res) => {
     // remove all the readings of both sensors (clear the database)
 
     const tempResponse = await tempSensor.remove();

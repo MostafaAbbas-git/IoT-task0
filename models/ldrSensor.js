@@ -18,7 +18,7 @@ const ldrSensor = getLdrSensorModel();
 
 async function getLDRReadings() {
     // Retrieve all distance values added by the ESP
-    return await ldrSensor.find().sort({ _id: 1 });
+    return await ldrSensor.find().sort({ createdAt: -1 }).limit(10);
 }
 
 
