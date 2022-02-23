@@ -7,8 +7,6 @@ const { tempSensor, addTempValue, getTempReadings, getLastTemp } = require("../m
 const { ldrSensor, validateReadings, getLDRReadings, addLDRValue, getLastDistance } = require("../models/ldrSensor");
 const { Button, getButtonState, updateButtonState } = require("../models/ledButton");
 
-const buttonStateMiddleware = require("../middleware/buttonState");
-
 
 router.get("/", cors(), async (req, res) => {
 
