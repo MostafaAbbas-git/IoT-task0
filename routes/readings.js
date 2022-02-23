@@ -5,7 +5,7 @@ const { tempSensor, addTempValue, getTempReadings, getLastTemp } = require("../m
 const { ldrSensor, validateReadings, getLDRReadings, addLDRValue, getLastDistance } = require("../models/ldrSensor");
 
 const validate = require('../middleware/validate');
-const cors = require('cors')
+const cors = require('cors');
 
 
 router.get("/", cors(), async (req, res) => {
