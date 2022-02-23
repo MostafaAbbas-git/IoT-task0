@@ -5,18 +5,15 @@ const { tempSensor, addTempValue, getTempReadings, getLastTemp } = require("../m
 const { ldrSensor, validateReadings, getLDRReadings, addLDRValue, getLastDistance } = require("../models/ldrSensor");
 
 const validate = require('../middleware/validate');
+const cors = require('cors')
 
 
-router.get("/", async (req, res) => {
+router.get("/", cors(), async (req, res) => {
 
     const temperature = await getTempReadings();
     const distance = await getLDRReadings();
     var tempValues = [];
     var distanceValues = [];
-    // const timestamp = JSON.stringify(temperature[0].createdAt);
-    // const splittedTime = timestamp.split(":", 3);
-    // var seconds = parseInt(splittedTime[2]);
-
 
     temperature.forEach(element => tempValues.push(element.temperature));
     distance.forEach(element => distanceValues.push(element.distance));
@@ -75,3 +72,11 @@ router.delete("/", async (req, res) => {
 });
 
 module.exports = router;
+
+/* 
+Slicing seconds:
+
+const timestamp = JSON.stringify(temperature[0].createdAt);
+const splittedTime = timestamp.split(":", 3);
+var seconds = parseInt(splittedTime[2]);
+*/
