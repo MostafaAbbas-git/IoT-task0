@@ -23,7 +23,7 @@ router.get("/", cors(), async (req, res) => {
     });
 });
 
-router.post("/buttonstate", [validate(validateState), cors()], async (req, res) => {
+router.post("/buttonstate", cors(), async (req, res) => {
 
     console.log(`Recieved state from the website: ${req.body.buttonState}`);
 
