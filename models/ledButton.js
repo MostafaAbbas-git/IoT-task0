@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Joi = require("joi");
+
 
 const buttonSchema = new mongoose.Schema(
     {
@@ -34,8 +36,16 @@ async function updateButtonState(state) {
 }
 
 
+function validateState(req) {
+    const schema = Joi.object({
+        buttonState: Joi.boolean().required()
+    });
+    return schema.validate(req);
+}
+
 module.exports = {
     Button,
     getButtonState,
-    updateButtonState
+    updateButtonState,
+    validateState
 };

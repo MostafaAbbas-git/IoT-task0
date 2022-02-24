@@ -5,7 +5,9 @@ const cors = require('cors');
 
 const { tempSensor, addTempValue, getTempReadings, getLastTemp } = require("../models/tempSensor");
 const { ldrSensor, validateReadings, getLDRReadings, addLDRValue, getLastDistance } = require("../models/ldrSensor");
-const { Button, getButtonState, updateButtonState } = require("../models/ledButton");
+const { Button, getButtonState, updateButtonState, validateState } = require("../models/ledButton");
+
+const validate = require('../middleware/validate');
 
 
 router.get("/", cors(), async (req, res) => {
@@ -21,7 +23,7 @@ router.get("/", cors(), async (req, res) => {
     });
 });
 
-router.post("/buttonstate", cors(), async (req, res) => {
+router.post("/buttonstate", [validate(validateState), cors()], async (req, res) => {
 
     console.log(`Recieved state from the website: ${req.body.buttonState}`);
 
