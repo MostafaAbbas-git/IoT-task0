@@ -25,6 +25,11 @@ router.get("/", cors(), async (req, res) => {
 
 router.post("/buttonstate", cors(), async (req, res) => {
 
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
     console.log(`Recieved state from the website: ${req.body.buttonState}`);
 
     const lastButtonState = await updateButtonState(req.body.buttonState);
