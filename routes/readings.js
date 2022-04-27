@@ -12,8 +12,8 @@ router.get("/", async (req, res) => {
 
     const temperature = await getTempReadings();
     const distance = await getLDRReadings();
-    var tempValues = [];
-    var distanceValues = [];
+    let tempValues = [];
+    let distanceValues = [];
 
     temperature.forEach(element => tempValues.push(element.temperature));
     distance.forEach(element => distanceValues.push(element.distance));
@@ -31,32 +31,47 @@ router.get("/withtime", async (req, res) => {
     const temperature = await getTempReadings();
     const distance = await getLDRReadings();
 
-    var tempValues = [];
-    var distanceValues = [];
-    var timestamps = [];
+    let tempValues = [];
+    let distanceValues = [];
+    let timestamps = [];
+    let tempTimeStamps = [];
+    let distTimeStamps = [];
 
-    distance.forEach(element => distanceValues.push(element.distance));
+    distance.forEach(element => {
+        distanceValues.push(element.distance);
+
+        // add timestamps
+        let timestamp = JSON.stringify(element.createdAt);
+        let splittedStamp = timestamp.split("T", 2);
+        let totalTime = splittedStamp[1];
+        let splittedTime = totalTime.split(".", 2);
+        let time = splittedTime[0];
+        distTimeStamps.push(time);
+    });
+
     temperature.forEach(element => {
         tempValues.push(element.temperature);
 
         // add timestamps
-        var timestamp = JSON.stringify(element.createdAt);
-        var splittedStamp = timestamp.split("T", 2);
-        var totalTime = splittedStamp[1];
-        var splittedTime = totalTime.split(".", 2);
-        var time = splittedTime[0];
-        timestamps.push(time);
+        let timestamp = JSON.stringify(element.createdAt);
+        let splittedStamp = timestamp.split("T", 2);
+        let totalTime = splittedStamp[1];
+        let splittedTime = totalTime.split(".", 2);
+        let time = splittedTime[0];
+        tempTimeStamps.push(time);
     });
 
     const reversedTempValues = tempValues.reverse();
     const reversedDistanceValues = distanceValues.reverse();
-    const reversedTimestampValues = timestamps.reverse();
+    const reversedTempTimestampValues = tempTimeStamps.reverse();
+    const reversedDistTimestampValues = distTimeStamps.reverse();
 
     // send the response as json with the last read of each sensor    
     res.status(200).json({
         temperature: reversedTempValues,
         distance: reversedDistanceValues,
-        time: reversedTimestampValues
+        tempTime: reversedTempTimestampValues,
+        distTime: reversedDistTimestampValues
     });
 
 });
@@ -110,5 +125,5 @@ Slicing seconds:
 
 const timestamp = JSON.stringify(temperature[0].createdAt);
 const splittedTime = timestamp.split(":", 3);
-var seconds = parseInt(splittedTime[2]);
+let seconds = parseInt(splittedTime[2]);
 */

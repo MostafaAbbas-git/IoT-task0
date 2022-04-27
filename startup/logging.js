@@ -1,7 +1,7 @@
 require('express-async-errors');
 const winston = require('winston');
 
-var logger = winston.createLogger({
+let logger = winston.createLogger({
     silent: false,
     level: 'info',
     format: winston.format.json(),
