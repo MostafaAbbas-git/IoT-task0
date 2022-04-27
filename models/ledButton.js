@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 
-const buttonSchema = new mongoose.Schema({
-    buttonState: {
-        type: Boolean,
-        required: true
+const buttonSchema = new mongoose.Schema(
+    {
+        buttonState: Boolean
     },
-});
+    { timestamps: true }
+);
 
 // function getButtonModel() {
 //     return mongoose.model("Button", buttonSchema);
@@ -32,7 +32,7 @@ async function updateButtonState(state) {
 
     const newButtonDocument = new Button({ buttonState: state });
 
-    console.log(`updatedState: ${state}`);
+    console.log(`client buttonstate is: ${state}`);
     const result = await newButtonDocument.save();
     return result;
 }
