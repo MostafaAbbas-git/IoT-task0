@@ -8,7 +8,7 @@ const validate = require('../middleware/validate');
 const cors = require('cors');
 
 
-router.get("/", cors(), async (req, res) => {
+router.get("/", async (req, res) => {
 
     const temperature = await getTempReadings();
     const distance = await getLDRReadings();
@@ -26,7 +26,7 @@ router.get("/", cors(), async (req, res) => {
 
 });
 
-router.get("/withtime", cors(), async (req, res) => {
+router.get("/withtime", async (req, res) => {
 
     const temperature = await getTempReadings();
     const distance = await getLDRReadings();
@@ -80,11 +80,11 @@ router.post("/", [validate(validateReadings), cors()], async (req, res) => {
 });
 
 
-router.delete("/", cors(), async (req, res) => {
+router.delete("/", async (req, res) => {
     // remove all the readings of both sensors (clear the database)
 
-    const tempResponse = await tempSensor.remove();
-    const ldrResponse = await ldrSensor.remove();
+    const tempResponse = await tempSensor.deleteMany({});
+    const ldrResponse = await ldrSensor.deleteMany({});
 
     res.status(200).json({
         message: "Database cleared successfully",
@@ -93,20 +93,6 @@ router.delete("/", cors(), async (req, res) => {
     });
 });
 
-router.post("/button", cors(), async (req, res) => {
-
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
-
-
-    // send the response as json with the last read of each sensor
-    res.status(200).json({
-        message: "State saved",
-        buttonState: req.body.buttonState
-    });
-});
 module.exports = router;
 
 /* 

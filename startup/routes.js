@@ -6,6 +6,6 @@ const interface = require('../routes/interface');
 module.exports = function (app) {
     app.use(express.json());
     app.use('/api/readings', readings);
-    app.use('/interface', interface);
+    app.use('/api/interface', interface);
 
 }

@@ -2,17 +2,19 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 
-const buttonSchema = new mongoose.Schema(
-    {
-        buttonState: Boolean,
-    }
-);
+const buttonSchema = new mongoose.Schema({
+    buttonState: {
+        type: Boolean,
+        required: true
+    },
+});
 
-function getButtonModel() {
-    return mongoose.model("Button", buttonSchema);
-}
+// function getButtonModel() {
+//     return mongoose.model("Button", buttonSchema);
+// }
 
-const Button = getButtonModel();
+// const Button = getButtonModel();
+const Button = new mongoose.model('Button', buttonSchema);
 
 
 async function getButtonState() {
@@ -26,13 +28,13 @@ async function updateButtonState(state) {
     // 1. delete the previous state and just add the new one
     // 2. update the one already exists
 
-    await Button.remove();
+    await Button.deleteMany({});
 
-    const buttonModel = new Button({ buttonState: state });
+    const newButtonDocument = new Button({ buttonState: state });
 
     console.log(`updatedState: ${state}`);
-
-    return await buttonModel.save();
+    const result = await newButtonDocument.save();
+    return result;
 }
 
 
@@ -43,9 +45,8 @@ function validateState(req) {
     return schema.validate(req);
 }
 
-module.exports = {
-    Button,
-    getButtonState,
-    updateButtonState,
-    validateState
-};
+
+exports.Button = Button;
+exports.getButtonState = getButtonState;
+exports.updateButtonState = updateButtonState;
+exports.validateState = validateState;
