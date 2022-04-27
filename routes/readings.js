@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const { tempSensor, addTempValue, getTempReadings, getLastTemp } = require("../models/tempSensor");
-const { ldrSensor, validateReadings, getLDRReadings, addLDRValue, getLastDistance } = require("../models/ldrSensor");
+const { tempSensor, addTempValue, getTempReadings } = require("../models/tempSensor");
+const { ldrSensor, validateTempReading, validateDistReading, getLDRReadings, addLDRValue } = require("../models/ldrSensor");
 
 const validate = require('../middleware/validate');
 const cors = require('cors');
@@ -61,20 +61,30 @@ router.get("/withtime", async (req, res) => {
 
 });
 
-router.post("/", [validate(validateReadings), cors()], async (req, res) => {
+router.post("/tempValue", [validate(validateTempReading), cors()], async (req, res) => {
 
-    // insert into the database
+    // insert temperature reading into database
     const newTemp = await addTempValue({
         temperature: req.body.temperature
     });
+
+    // send the newly added value 
+    res.status(200).json({
+        message: "TempValue saved",
+        temperature: newTemp.temperature
+    });
+});
+
+router.post("/distValue", [validate(validateDistReading), cors()], async (req, res) => {
+
+    // insert distance reading into database
     const newDistance = await addLDRValue({
         distance: req.body.distance
     });
 
     // send the newly added value 
     res.status(200).json({
-        message: "Values saved",
-        temperature: newTemp.temperature,
+        message: "DistValue saved",
         distance: newDistance.distance
     });
 });

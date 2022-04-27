@@ -9,16 +9,16 @@ const buttonSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-// function getButtonModel() {
-//     return mongoose.model("Button", buttonSchema);
-// }
-
-// const Button = getButtonModel();
 const Button = new mongoose.model('Button', buttonSchema);
+const ButtonTwo = new mongoose.model('ButtonTwo', buttonSchema);
 
 
 async function getButtonState() {
     return await Button.findOne();
+}
+
+async function getButtonTwoState() {
+    return await ButtonTwo.findOne();
 }
 
 
@@ -37,6 +37,17 @@ async function updateButtonState(state) {
     return result;
 }
 
+async function updateButtonTwoState(state) {
+
+    await ButtonTwo.deleteMany({});
+
+    const newButtonDocument = new ButtonTwo({ buttonState: state });
+
+    console.log(`client buttonTwostate is: ${state}`);
+    const result = await newButtonDocument.save();
+    return result;
+}
+
 
 function validateState(req) {
     const schema = Joi.object({
@@ -47,6 +58,11 @@ function validateState(req) {
 
 
 exports.Button = Button;
+exports.ButtonTwo = ButtonTwo;
 exports.getButtonState = getButtonState;
 exports.updateButtonState = updateButtonState;
+
+exports.getButtonTwoState = getButtonTwoState;
+exports.updateButtonTwoState = updateButtonTwoState;
+
 exports.validateState = validateState;

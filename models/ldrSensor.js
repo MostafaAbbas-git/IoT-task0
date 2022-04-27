@@ -33,17 +33,24 @@ async function addLDRValue(ldrReading) {
 }
 
 
-function validateReadings(req) {
+function validateTempReading(req) {
     const schema = Joi.object({
-        distance: Joi.number().required(),
         temperature: Joi.number().required()
+    });
+    return schema.validate(req);
+}
+
+function validateDistReading(req) {
+    const schema = Joi.object({
+        distance: Joi.number().required()
     });
     return schema.validate(req);
 }
 
 module.exports = {
     ldrSensor,
-    validateReadings,
+    validateTempReading,
+    validateDistReading,
     getLDRReadings,
     addLDRValue,
     getLastDistance
