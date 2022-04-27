@@ -2,24 +2,8 @@ const express = require("express");
 const app = express();
 const winston = require('winston');
 const server = require('http').createServer(app);
-const cors = require("cors");
-// const whitelist = ["http://localhost:3000"]
 
-const corsOptions = {
-    origin: function (origin, callback) {
-        callback(null, true)
-
-        // if (!origin || whitelist.indexOf(origin) !== -1) {
-        //     callback(null, true)
-        // } else {
-        //     callback(new Error("Not allowed by CORS"))
-        // }
-    },
-    credentials: true,
-}
-
-app.use(cors(corsOptions))
-
+require('./startup/cors')(app);
 require('./startup/routes')(app);
 require("./startup/database")();
 require("./startup/logging");
