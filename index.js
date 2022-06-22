@@ -13,11 +13,13 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + "/views/home.html");
 });
 
+
 // PORT
 const port = process.env.PORT || 8000;
 server.listen(port, () => {
     winston.info(`Listening on port ${port}...`);
 });
+
 
 
 module.exports = server;
